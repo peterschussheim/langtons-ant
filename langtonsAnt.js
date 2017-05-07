@@ -42,7 +42,7 @@ const buildMatrix = options => {
   for (let x = 0; x < gridSize; x++) {
     newGrid[x] = [];
     for (let y = 0; y < gridSize; y++) {
-      newGrid[x][y] = true;
+      newGrid[x][y] = 0;
     }
   }
   return newGrid;
