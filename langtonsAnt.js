@@ -23,6 +23,7 @@ let options = {
   black,
   width: 500,
   height: 500,
+  gridSize: 500,
   pixelSize: 4,
   speed: 100,
   steps: 10000
@@ -34,6 +35,20 @@ let directions = {
   left,
   right
 };
+
+const buildMatrix = options => {
+  let { gridSize } = options;
+  let newGrid = [];
+  for (let x = 0; x < gridSize; x++) {
+    newGrid[x] = [];
+    for (let y = 0; y < gridSize; y++) {
+      newGrid[x][y] = true;
+    }
+  }
+  return newGrid;
+}
+
+let grid = buildMatrix(options);
 
 const renderGrid = grid =>
   grid.map((row, rowIndex) => {
@@ -49,15 +64,29 @@ const renderGrid = grid =>
   });
 
 // moveAnt :: (Matrix, Object) -> [Matrix, Object]
+const moveAnt = (grid, ant) => {
+  grid[ant.x][ant.y] = grid[ant.x][ant.y] === 1 ? 0 : -1;
+  ant.currentDirection = getNextDirection(currentDirection, currentCellColor)
+}
 
+const getNextDirection = (currentDirection, currentCellColor) => {
+  switch ()
+}
 
 // Recursively update the grid on each step
 const updateGrid = (grid, ant, steps) => {
-  { speed, steps } = options;
+  let { speed } = options;
   [grid, ant] = moveAnt(grid, ant);
   renderGrid(grid);
 
   if (steps > 0) {
-    setTimeout(updateGrid, speed, grid, ant, --steps)
+    setTimeout(() => updateGrid(speed, grid, ant), --steps)
   }
+}
+
+
+let ant = {
+  x: width / 2,
+  y: height / 2,
+  currentDirection: up
 }
