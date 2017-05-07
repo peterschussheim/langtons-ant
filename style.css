@@ -2,6 +2,6 @@ body {
   font-family: Arial, Helvetica, sans-serif
 }
 canvas {
-  float: left;
+  border: 1px dotted #999;
   image-rendering: pixelated;
 }
