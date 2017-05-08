@@ -1,15 +1,18 @@
 const directions = ['up', 'right', 'down', 'left'];
-const resetButton = document.getElementById('reset');
+const pauseButton = document.getElementById('pause');
+const initializeButton = document.getElementById('init');
 
 function Grid() {
   const self = this;
+  self.isRunning;
   self.canvas = document.getElementById('canvas');
   self.ctx = self.canvas.getContext('2d');
-  let cells = [];
-  let count = 0;
-
-  const resolution = 100;
-  const w = 500;
+  self.cells = [];
+  self.count = 0;
+  self.timer;
+  const resolution = 200;
+  const w = 800;
+  const h = w;
   const pixelSize = w / resolution;
 
   self.startPosition = resolution / 2;
@@ -20,36 +23,33 @@ function Grid() {
       for (let y = 0; y < resolution; y++) {
         temp.push(-1);
       }
-      cells.push(temp);
+      self.cells.push(temp);
     }
   };
 
   self.init = () => {
+    self.start();
     self.ant = new Ant(self);
     self.iterator = setInterval(self.iterate, 10);
     self.buildGrid();
-    // resetButton.addEventListener('click', function() {
-    //   buildGrid()
-    //   // self.ctx.clearRect(0, 0, w, w)
-    //   // count = 0;
-    //   // cells = [];
-    //   // init()
-    //   // self.ant = new Ant(self)
-    // })
   };
 
   self.render = function() {
+    let antPosition = self.ant.x + self.ant.y * h;
+    if (antPosition > self.cells.length || antPosition < 0) {
+      clearInterval(self.timer);
+    }
     self.clearGrid();
     self.ctx.fillStyle = 'black';
-    for (let x = 0; x < cells.length; x++) {
-      for (let y = 0; y < cells[0].length; y++) {
-        if (cells[x][y] === 1) {
+    for (let x = 0; x < self.cells.length; x++) {
+      for (let y = 0; y < self.cells[0].length; y++) {
+        if (self.cells[x][y] === 1) {
           self.ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
         }
       }
     }
 
-    self.ctx.fillStyle = 'red';
+    self.ctx.fillStyle = 'blue';
     self.ctx.fillRect(
       self.ant.x * pixelSize,
       self.ant.y * pixelSize,
@@ -59,16 +59,50 @@ function Grid() {
   };
 
   self.iterate = () => {
+    if (!self.isRunning) {
+      return;
+    }
     const x = self.ant.x;
     const y = self.ant.y;
-    self.ant.changeDirection(cells[x][y]);
+    self.ant.changeDirection(self.cells[x][y]);
     self.ant.move();
     self.swapCell(x, y);
     self.render();
-    if (count % 10 === 0) {
-      document.getElementById('count').innerHTML = `${count} steps`;
+    if (self.count % 10 === 0) {
+      document.getElementById('count').innerHTML = `${self.count} steps`;
     }
-    count++;
+    self.count++;
+  };
+
+  self.start = () => {
+    self.isRunning = true;
+    self.timer = setInterval(
+      function() {
+        for (let i = 0; i < self.count; i++) {
+          if (self.render() === true) {
+            self.isRunning = false;
+            break;
+          }
+        }
+      }.bind(self),
+      0
+    );
+  };
+
+  self.stop = () => {
+    self.isRunning = false;
+  };
+
+  self.reset = () => {
+    self.stop();
+    self.cells = [];
+    self.count = 0;
+    self.ctx.canvas.width = self.ctx.canvas.width;
+  };
+
+  self.restart = () => {
+    self.reset();
+    self.start();
   };
 
   self.clearGrid = () => {
@@ -77,10 +111,8 @@ function Grid() {
   };
 
   self.swapCell = (x, y) => {
-    cells[x][y] = -cells[x][y];
+    self.cells[x][y] = -self.cells[x][y];
   };
-
-  self.init();
 }
 
 function Ant(grid) {
@@ -119,4 +151,24 @@ function Ant(grid) {
     }
   };
 }
-new Grid();
+
+let instance = new Grid();
+
+if (instance.isRunning) {
+  initializeButton.disabled = false;
+}
+
+initializeButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  initializeButton.disabled = true;
+  instance.init();
+});
+
+pauseButton.addEventListener('click', function(e) {
+  if (!instance.isRunning) {
+    instance.isRunning = true;
+  } else {
+    e.preventDefault();
+    instance.isRunning = false;
+  }
+});

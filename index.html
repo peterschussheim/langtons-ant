@@ -7,14 +7,15 @@
     <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
-    <div>
+    <div class="container">
       <h1 class="header">Langton's Ant</h1>
       <h3 class="description">An implementation in JavaScript</h3>
       <div class="controls">
-        <!--<input id="reset" type="button">Reset</input>-->
+        <input id="init" type="button">Initialize Simulation</input>
+        <input id="pause" type="button">Pause</input>
+        <div id="count"></div>
       </div>
-      <canvas id="canvas" width="500", height="500"></canvas>
-      <div id="count"></div>
+      <canvas id="canvas" width="800", height="800"></canvas>
     </div>
       <script src="index.js"></script>
   </body>
