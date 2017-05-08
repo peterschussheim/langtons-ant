@@ -1,10 +1,10 @@
 const directions = ['up', 'right', 'down', 'left'];
-const resetButton = document.getElementById('reset')
+const resetButton = document.getElementById('reset');
 
 function Grid() {
   const self = this;
-  this.canvas = document.getElementById('canvas');
-  this.ctx = this.canvas.getContext('2d');
+  self.canvas = document.getElementById('canvas');
+  self.ctx = self.canvas.getContext('2d');
   let cells = [];
   let count = 0;
 
@@ -26,7 +26,6 @@ function Grid() {
 
   function init() {
     self.ant = new Ant(self);
-
     self.iterator = setInterval(self.iterate, 10);
     buildGrid();
     // resetButton.addEventListener('click', function() {
@@ -39,9 +38,9 @@ function Grid() {
     // })
   }
 
-  this.render = function() {
+  self.render = function() {
     clearGrid();
-    this.ctx.fillStyle = 'black';
+    self.ctx.fillStyle = 'black';
     for (let x = 0; x < cells.length; x++) {
       for (let y = 0; y < cells[0].length; y++) {
         if (cells[x][y] === 1) {
@@ -50,8 +49,8 @@ function Grid() {
       }
     }
 
-    this.ctx.fillStyle = 'red';
-    this.ctx.fillRect(
+    self.ctx.fillStyle = 'red';
+    self.ctx.fillRect(
       self.ant.x * pixelSize,
       self.ant.y * pixelSize,
       pixelSize,
@@ -59,7 +58,7 @@ function Grid() {
     );
   };
 
-  this.iterate = () => {
+  self.iterate = () => {
     const x = self.ant.x;
     const y = self.ant.y;
     self.ant.changeDirection(cells[x][y]);
@@ -82,29 +81,28 @@ function Grid() {
   }
 
   init();
-};
-
+}
 
 function Ant(grid, x, y, direction) {
   const self = this;
-  this.x = this.y = grid.startPosition;
-  this.direction = 0;
+  self.x = self.y = grid.startPosition;
+  self.direction = 0;
   const gridSize = grid.startPosition * 2;
 
-  this.move = () => {
+  self.move = () => {
     switch (directions[self.direction]) {
-      case 'up':
-        self.y = (self.y - 1) % gridSize;
-        break;
-      case 'down':
-        self.y = (self.y + 1) % gridSize;
-        break;
-      case 'left':
-        self.x = (self.x - 1) % gridSize;
-        break;
-      case 'right':
-        self.x = (self.x + 1) % gridSize;
-        break;
+    case 'up':
+      self.y = (self.y - 1) % gridSize;
+      break;
+    case 'down':
+      self.y = (self.y + 1) % gridSize;
+      break;
+    case 'left':
+      self.x = (self.x - 1) % gridSize;
+      break;
+    case 'right':
+      self.x = (self.x + 1) % gridSize;
+      break;
     }
     if (self.x < 0) {
       self.x = gridSize + self.x;
@@ -114,7 +112,7 @@ function Ant(grid, x, y, direction) {
     }
   };
 
-  this.changeDirection = cellValue => {
+  self.changeDirection = cellValue => {
     self.direction = (self.direction - cellValue) % 4;
     if (self.direction < 0) {
       self.direction = 4 + self.direction;
