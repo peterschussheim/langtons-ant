@@ -83,7 +83,7 @@ function Grid() {
   self.init();
 }
 
-function Ant(grid, x, y, direction) {
+function Ant(grid) {
   const self = this;
   self.x = self.y = grid.startPosition;
   self.direction = 0;
