@@ -1,4 +1,5 @@
 const directions = ['up', 'right', 'down', 'left'];
+const resetButton = document.getElementById('reset')
 
 function Grid() {
   const self = this;
@@ -13,8 +14,7 @@ function Grid() {
 
   self.startPosition = resolution / 2;
 
-  function init() {
-    self.ant = new Ant(self);
+  function buildGrid() {
     for (let x = 0; x < resolution; x++) {
       const temp = [];
       for (let y = 0; y < resolution; y++) {
@@ -22,9 +22,21 @@ function Grid() {
       }
       cells.push(temp);
     }
+  }
 
-    self.iterator = setInterval(self.iterate, 5);
-    // document.getElementById('skip').onclick = () => {}
+  function init() {
+    self.ant = new Ant(self);
+
+    self.iterator = setInterval(self.iterate, 10);
+    buildGrid();
+    // resetButton.addEventListener('click', function() {
+    //   buildGrid()
+    //   // self.ctx.clearRect(0, 0, w, w)
+    //   // count = 0;
+    //   // cells = [];
+    //   // init()
+    //   // self.ant = new Ant(self)
+    // })
   }
 
   this.render = function() {
@@ -68,8 +80,10 @@ function Grid() {
   function swapCell(x, y) {
     cells[x][y] = -cells[x][y];
   }
+
   init();
-}
+};
+
 
 function Ant(grid, x, y, direction) {
   const self = this;
