@@ -14,7 +14,7 @@ function Grid() {
 
   self.startPosition = resolution / 2;
 
-  function buildGrid() {
+  self.buildGrid = () => {
     for (let x = 0; x < resolution; x++) {
       const temp = [];
       for (let y = 0; y < resolution; y++) {
@@ -22,12 +22,12 @@ function Grid() {
       }
       cells.push(temp);
     }
-  }
+  };
 
-  function init() {
+  self.init = () => {
     self.ant = new Ant(self);
     self.iterator = setInterval(self.iterate, 10);
-    buildGrid();
+    self.buildGrid();
     // resetButton.addEventListener('click', function() {
     //   buildGrid()
     //   // self.ctx.clearRect(0, 0, w, w)
@@ -36,10 +36,10 @@ function Grid() {
     //   // init()
     //   // self.ant = new Ant(self)
     // })
-  }
+  };
 
   self.render = function() {
-    clearGrid();
+    self.clearGrid();
     self.ctx.fillStyle = 'black';
     for (let x = 0; x < cells.length; x++) {
       for (let y = 0; y < cells[0].length; y++) {
@@ -63,7 +63,7 @@ function Grid() {
     const y = self.ant.y;
     self.ant.changeDirection(cells[x][y]);
     self.ant.move();
-    swapCell(x, y);
+    self.swapCell(x, y);
     self.render();
     if (count % 10 === 0) {
       document.getElementById('count').innerHTML = `${count} steps`;
@@ -71,16 +71,16 @@ function Grid() {
     count++;
   };
 
-  function clearGrid() {
+  self.clearGrid = () => {
     self.ctx.fillStyle = 'white';
     self.ctx.fillRect(0, 0, w, w);
-  }
+  };
 
-  function swapCell(x, y) {
+  self.swapCell = (x, y) => {
     cells[x][y] = -cells[x][y];
-  }
+  };
 
-  init();
+  self.init();
 }
 
 function Ant(grid, x, y, direction) {
