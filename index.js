@@ -152,23 +152,23 @@ function Ant(grid) {
   };
 }
 
-let instance = new Grid();
+let app = new Grid();
 
-if (instance.isRunning) {
+if (app.isRunning) {
   initializeButton.disabled = false;
 }
 
 initializeButton.addEventListener('click', function(e) {
   e.preventDefault();
   initializeButton.disabled = true;
-  instance.init();
+  app.init();
 });
 
 pauseButton.addEventListener('click', function(e) {
-  if (!instance.isRunning) {
-    instance.isRunning = true;
+  if (!app.isRunning) {
+    app.isRunning = true;
   } else {
     e.preventDefault();
-    instance.isRunning = false;
+    app.isRunning = false;
   }
 });
